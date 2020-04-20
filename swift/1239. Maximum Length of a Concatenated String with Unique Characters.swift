@@ -1,3 +1,6 @@
+// 1239. Maximum Length of a Concatenated String with Unique Characters
+// https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/
+
 class Solution {
     func maxLength(_ arr: [String]) -> Int {
         guard !arr.isEmpty else { return 0 }
