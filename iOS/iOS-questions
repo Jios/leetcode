@@ -1,0 +1,12 @@
+iOS
+Given two views, write an algorithm to find the closest common super-view if one exists.  
+How would you design a flight booking app?  
+Implement a hash map data structure.  
+How would to get from the top left of a quad-graph to the bottom right?  
+- Using a telephone keypad to enter a passcode; get all possible combinations  
+
+
+* Re-write the UITableViewDelegate API, to include the same queue and dequeuing functionality of apple's native api.  
+* System design: design a ride sharing app for 3 buildings of google
+* IOS: how hittest works, rewrite hittest, write a recursive method to print events chain of cascaded views, use gcd to define dependencies
+
