@@ -1,12 +1,16 @@
-class Solution {
-	
+// 127. Word Ladder
+// https://leetcode.com/problems/word-ladder/
+
+
+class Solution 
+{	
 	// Global vairable of dictionary
 	// Key: generic word
 	// Value: words that share same generic word
 	var dict: [String: [String]] = [:]
 	
-	func findLadders(_ beginWord: String, _ endWord: String, _ wordList: [String]) -> Int {
-		
+	func findLadders(_ beginWord: String, _ endWord: String, _ wordList: [String]) -> Int 
+	{	
 		guard wordList.contains(endWord) else { return 0 }
 		
 		// Construct the dictionary
