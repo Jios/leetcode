@@ -1,4 +1,6 @@
+// 25. Reverse Nodes in k-Group
 // https://leetcode.com/problems/reverse-nodes-in-k-group/
+
 
 let node: ListNode? = ListNode(-1)
 var tmp = node
@@ -37,63 +39,68 @@ public class ListNode {
 
 class Solution 
 {
-    func reverseKGroup(_ head: ListNode?, _ k: Int) -> ListNode?
+    func reverseKGroup(_ head: ListNode?, _ k: Int) -> ListNode? 
     {
-        guard head != nil else {
+        guard let head = head else {
             return nil
         }
-        
-        var node = head
-        var startNode = node
-        
-        var count = 0
-        
-        var newHead: ListNode?
-        
-        while node != nil
+
+        if k < 2
         {
-            count += 1
-            
-            if count == k
-            {
-                var revHead = startNode
-                var ktail = node
-                
-                startNode = node?.next
-                
-                var next = node?.next
-                
-                while count > 1
-                {
-                    print("\(count): \(revHead!.val) <~> \(ktail!.val)")
-                    
-                    let tmp = revHead?.next
-                    revHead?.next = next
-                    next = revHead
-                    revHead = tmp
-                    
-                    count -= 1
-                }
-                
-                // revHead?.next = ktail?.next
-                ktail?.next = revHead
-                
-                if newHead == nil
-                {
-                    newHead = revHead
-                }
-                
-                node = startNode
-                count = 0
-            }
-            else
-            {
-                node = node?.next
-            }
-            
-            print(node?.val)
+            return head
         }
+
+        var dummy = ListNode(0)
         
-        return newHead ?? head
+        dummy.next = head
+        
+        var current = dummy
+
+        while current.next != nil 
+        {
+            var start = current.next
+            var end = current.next
+            
+            var count = 1
+            while count < k && end != nil
+            {
+                end = end!.next
+                count += 1
+            }
+            
+            if end == nil
+            {
+                break
+            }
+            
+            //next keep track for head of remaing list
+            var next = end!.next
+            
+            //break the chain to reverse the k elements
+            end!.next = nil
+            
+            var tCurr = start
+            var prev:ListNode? = nil
+
+            while tCurr != nil
+            {
+                let tNext = tCurr!.next
+                tCurr!.next = prev
+                prev = tCurr!
+                tCurr = tNext
+            }
+            
+            
+            //after reversing. Put the conenction back
+            
+            current.next = end
+            
+            start!.next = next
+            
+            //start next iteration
+            current = start!
+            
+        }
+        return dummy.next
     }
 }
