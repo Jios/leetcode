@@ -10,9 +10,13 @@ DispatchQueue.global(qos: .background).async {
 
 let group = DispatchGroup()
 group.enter()
-group.leavel()
+group.leave()
 group.notify(queue: .main) {
 }
+
+let semaphore = DispatchSemaphore(value: 1)
+semaphore.wait()
+semaphore.signal()
 
 // activity indicator 
 var spinner = UIActivityIndicatorView(style: .whteLarge)
