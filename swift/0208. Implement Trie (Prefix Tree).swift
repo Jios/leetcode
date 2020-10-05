@@ -53,11 +53,11 @@ class Trie
         var node = root
         
         word.forEach { c in
-                      if !node.contains(c)
-                      {
-                          node.put(c)
-                      }
-                      node = node.get(c)!
+            if !node.contains(c)
+            {
+                node.put(c)
+            }
+            node = node.get(c)!
         }
         
         node.isEnd = true
