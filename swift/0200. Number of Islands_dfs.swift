@@ -4,23 +4,20 @@
 
 class Solution
 {
-    var grid: [[Character]] = []
-
     func numIslands(_ grid: [[Character]]) -> Int
     {
-        self.grid = grid
-
+        var grid = grid
         var count = 0
         
-        for i in 0 ..< self.grid.count
+        for i in 0 ..< grid.count
         {
-            for j in 0 ..< self.grid[i].count
+            for j in 0 ..< grid[i].count
             {
-                if self.grid[i][j] == "1"
+                if grid[i][j] == "1"
                 {
                     count += 1
                     
-                    markIsland(i, j)
+                    dfs(i, j, &grid)
                 }
             }
         }
@@ -28,25 +25,25 @@ class Solution
         return count
     }
     
-    private func markIsland(_ i: Int, _ j: Int)
+    private func dfs(_ i: Int, _ j: Int, _ grid: inout [[Character]])
     {
         grid[i][j] = "0"
         
         if i-1 >= 0 && grid[i-1][j] == "1"
         {
-            markIsland(i-1, j)
+            dfs(i-1, j, &grid)
         }
         if i+1 < grid.count && grid[i+1][j] == "1"
         {
-            markIsland(i+1, j)
+            dfs(i+1, j, &grid)
         }
         if j-1 >= 0 && grid[i][j-1] == "1"
         {
-            markIsland(i, j-1)
+            dfs(i, j-1, &grid)
         }
         if j+1 < grid[i].count && grid[i][j+1] == "1"
         {
-            markIsland(i, j+1)
+            dfs(i, j+1, &grid)
         }
     }
 }
