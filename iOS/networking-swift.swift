@@ -1,6 +1,25 @@
 // swift
 
 
+// date formatter
+static let dFormat: String = "MM/dd/yyyy"
+static let sFormat: String = "yyyy-MM-dd"
+static let twoDigitYearFormat = "M/d/yy"
+static let monthYearFormat: String = "MMMM yyyy"
+static let tFormat = "HH:mm:ss"
+static let esFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+static let simpleFormat = "yyyy-MM-dd HH:mm Z"
+static let openHouseFormat = "E, MMM d yyyy"
+
+let formatter = DateFormatter()
+formatter.dateFormat = "MM/dd/yyyy"
+formatter.locale = Locale(identifier: "en_US_POSIX")
+
+let date = Date(timeIntervalSince1970: interval)
+let formatedDateString = formatter.string(from: date)
+
+
+
 // dispatch
 DispatchQueue.main.asyncAfter(deadline: .now()){
 }
@@ -24,13 +43,118 @@ spinner.startAnimating()
 
 
 
+// codable with DictionaryDecoder()
+
+if let arrDicts = dict[Key.kMultimediaList] as? [[String: Any]]
+{
+    for dict in arrDicts
+    {
+        do {
+            let decoder = DictionaryDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let multimedia = try decoder.decode(Multimedia.self, from: dict)
+            
+            multimedias.append(multimedia)
+        }
+        catch {
+            DebugManager.debug("Decode Multimedia object failed")
+            DebugManager.debug("\(arrDicts)")
+            assertionFailure("Decode Multimedia object failed")
+        }
+    }
+}
+
+// codable example
+
+struct Element: Codable
+{
+    // MARK: - # Value
+    
+    enum Value: Codable
+    {
+        // MARK: - # ValueError
+        
+        enum ValueError: Error {
+            case invalid
+        }
+        
+        // Result Type
+        case bool(Bool)
+        case string(String)
+        case int(Int)
+        case double(Double)
+        case date(Date)
+        
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            
+            if let string = try? container.decode(String.self)
+                , let value = Date.date(from: string)
+            {
+                self = .date(value)
+            }
+            else if let value = try? container.decode(Bool.self)
+            {
+                self = .bool(value)
+            }
+            else if let value = try? container.decode(Int.self)
+            {
+                self = .int(value)
+            }
+            else if let value = try? container.decode(Double.self)
+            {
+                self = .double(value)
+            }
+            else if let value = try? container.decode(String.self)
+            {
+                self = .string(value)
+            }
+            else
+            {
+                throw(ValueError.invalid)
+            }
+        }
+        
+        func encode(to encoder: Encoder) throws {
+            return
+        }
+    }
+    
+    // MARK: - # Element
+    
+    var id: String?
+    var title: String
+    var value: Value
+    
+    enum CodingKeys: String, CodingKey
+    {
+        case id
+        case title
+        case value
+    }
+    
+    // func decode<T>(valueType: T) where T : Decodable {
+
+    // }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        id = try? container.decode(String.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        value = try container.decode(Value.self, forKey: .value)
+    }
+}
+
+
 // networking
 
 request = URLRequest(url: url)
 request.httpMethod = "GET"
 
 let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
-	if let data - data
+	if let data = data
 	{
 		let json = try? JSONSerialization.jsonObject(with: data, options: [])
 	}
