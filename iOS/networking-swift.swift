@@ -148,6 +148,13 @@ struct Element: Codable
 }
 
 
+
+
+// ------------------------------------
+
+
+
+
 // networking
 
 request = URLRequest(url: url)
@@ -160,6 +167,11 @@ let dataTask = URLSession.shared.dataTask(with: request) { (data, response, erro
 	}
 }
 dataTask.resume()
+
+
+
+
+// ------------------------------------
 
 
 
@@ -212,6 +224,8 @@ func application(application: UIApplication!, didFinishLaunchingWithOptions laun
 }
 
 
+// --
+
 class ImageCache 
 {
     static func storeImage(urlString: String, img: UIImage)
@@ -250,4 +264,51 @@ class ImageCache
             }
         }.resume()
     }
+}
+
+
+
+// ------------------------------------
+
+
+
+func getItemData(completion: @escaping (Result<Content, Error>) -> Void)
+{
+    // pretend this is a real network request, but you
+    // can assume there will always be data and no error
+    session.networkTask { data in
+        
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
+            let content = try decoder.decode(Content.self, from: data)
+            
+            completion(.success(content))
+        }
+        catch (let error)
+        {
+            completion(.failure(error))
+        }
+    }
+}
+
+func fetch(urlStr: String?, completion: @escaping (Result<(data: Data, url: String), Error>) -> Void)
+{
+    guard let urlStr = urlStr, let url = URL(string: urlStr) else {
+        completion(.failure(Err.dataErr))
+        return
+    }
+    
+    URLSession.shared.dataTask(with: url, completionHandler: { data, _, error in
+        
+        if let data = data
+        {
+            completion(.success((data: data, url: urlStr)))
+        }
+        else
+        {
+            completion(.failure(error ?? Err.dataErr))
+        }
+    }).resume()
 }
